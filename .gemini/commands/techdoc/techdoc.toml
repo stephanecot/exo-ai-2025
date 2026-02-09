@@ -1,0 +1,4 @@
+description = "Generates a technical documentation for a project"
+prompt = """
+Generate the technical documentation for the project {{args}}
+"""
