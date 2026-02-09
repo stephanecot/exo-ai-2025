@@ -91,3 +91,48 @@ Base de données H2 en mémoire accessible via :
 - Niveau d'indépendance
 
 ⚠️ **Note** : Cette application contient intentionnellement des bugs (NullPointerException) pour servir d'exercice de formation à l'IA.
+
+## Technical Architecture Diagram
+
+```mermaid
+graph TD
+    subgraph "Presentation Layer"
+        A[CatController]
+        B[DogController]
+        C[BattleController]
+    end
+
+    subgraph "Service Layer"
+        D[CatService]
+        E[DogService]
+        F[BattleService]
+    end
+
+    subgraph "Data Access Layer"
+        G[CatRepository]
+        H[DogRepository]
+    end
+
+    subgraph "Model"
+        I[Cat]
+        J[Dog]
+        K[BattleResult]
+    end
+
+    A --> D
+    B --> E
+    C --> F
+
+    D --> G
+    E --> H
+
+    F --> D
+    F --> E
+
+    D --> I
+    E --> J
+    F --> K
+
+    G -- Interacts with --> I
+    H -- Interacts with --> J
+```

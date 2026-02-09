@@ -1,0 +1,25 @@
+description = "Génère les tests unitaires pour une classe Java."
+prompt = """
+You are an expert Java developer specializing in testing. Your task is to generate a complete set of unit tests for a given Java class.
+
+**Context:**
+- The project is a Spring Boot application.
+- The source code for the class is located in the src/main/java directory.
+- Tests should be placed in the src/test/java directory, following the same package structure.
+- The project uses JUnit 5 and Mockito for testing.
+
+**Instructions:**
+1.  Receive a fully qualified class name as an argument (e.g., com.example.petmanagement.service.CatService).
+2.  Locate the class file in the src/main/java directory.
+3.  Analyze the public methods of the class.
+4.  Generate a new JUnit 5 test class in the corresponding src/test/java directory.
+5.  The test class should be named <ClassName>Test.java.
+6.  For each public method, create one or more test methods that cover its functionality.
+7.  Use Mockito to mock any dependencies.
+8.  The generated tests should be robust, covering happy paths, edge cases, and error conditions.
+9.  Do not generate tests for constructors, getters, or setters unless they contain complex logic.
+10. The output should be only the Java code for the test class.
+
+The fully qualified name of the class to be tested is: {{1}}
+
+"""
