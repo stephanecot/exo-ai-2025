@@ -1,48 +1,128 @@
-Le but est de compléter en 1H le code en respectant les consignes suivantes :
-- Utiliser uniquement gemini CLI ou Code Assist en mode "Agent"
-- Garder le code simple et lisible
-- Ne pas ajouter de fonctionnalités non demandées
-- Ne pas supprimer de code existant
+# Objectif
+
+Le but est de compléter en **1 h** le code en respectant les consignes suivantes :
+
+- Utiliser uniquement **Gemini CLI** ou **Code Assist** en mode "Agent".
+- Garder le code simple et lisible.
+- Ne pas ajouter de fonctionnalités non demandées.
+- Ne pas supprimer de code existant.
+
+---
+
+# Remarques globales
+
+- L’intégralité du code doit être documentée à la fois en **anglais** et en **français**, avec des commentaires clairs expliquant la logique et les étapes de l’implémentation.  
+  Les commentaires doivent être placés au-dessus des sections de code correspondantes pour une meilleure lisibilité.
+- On utilisera **Spring MVC** pour la partie web.  
+  Les contrôleurs retourneront des objets Java qui seront automatiquement convertis en JSON grâce à l’annotation `@RestController` de Spring.
+- Réaliser l’ensemble des tests unitaires.
+
+---
+
+# Étapes pour l’implémentation
+
+## 1. Génération du fichier CSV
+
+- Générer un fichier CSV de 50 lignes représentant une liste de clients avec les champs suivants :
+  - `id`
+  - `nom`
+  - `prenom`
+  - `email`
+  - `date_inscription`
+- Utiliser des données fictives pour remplir les champs.
+- Le fichier CSV doit être nommé **`clients.csv`** et être enregistré dans le répertoire : `src/main/resources/data`
 
 
-Remarques globales :
-- L'intégralité du code doit être documenté à la fois en Englais et en Français, avec des commentaires clairs expliquant la logique et les étapes de l'implémentation. Les commentaires doivent être placés au-dessus des sections de code correspondantes pour une meilleure lisibilité.
-- On utilisera Spring MVC pour la partie web. Les controlleurs retourneront des objets Java qui seront automatiquement convertis en JSON grâce à l'annotation @RestController de Spring.
-- Faire l'ensemble des tests unitaires
+---
 
+## 2. Chargement des données au démarrage
 
-Etapes pour l'implémentation :
-# 1
-- Générer un fichier csv de 50 lignes representant une liste de clients avec les champs suivants : id, nom, prenom, email, date_inscription
-- Utiliser des données fictives pour remplir les champs
-- Le fichier csv doit être nommé "clients.csv" et être enregistré dans le répertoire "src/main/resources/data"
+- Lire ce fichier CSV au démarrage de l’application.
+- Parser le contenu du fichier et stocker les données dans une liste d’objets `Client` en mémoire  
+  (pas de base de données pour cet exercice).
+- Afficher la liste des clients dans la console au démarrage de l’application.
 
+---
 
-# 2
-- Lire ce fichier csv au démarrage de l'application
-- Parser le contenu du fichier et stocker les données dans une liste d'objets Client en mémoire (pas de base de données pour cet exercice)
-- Afficher la liste des clients dans la console au démarrage de l'application
+## 3. Exposition des endpoints REST
 
+L’application doit exposer les endpoints suivants :
 
-# 3
-- Cette application doit exposer les endpoints suivants :
-  - GET /clients : retourne la liste de tous les clients
-  - GET /clients/{id} : retourne les détails d'un client spécifique en fonction de son id
-  - POST /clients : permet d'ajouter un nouveau client à la liste (les données du client seront envoyées dans le corps de la requête au format JSON)
-- Générer l'ensemble des tests d'intégration pour ces endpoints en utilisant JUnit et MockMvc (En utilisant Spring)
+- `GET /clients`  
+  → Retourne la liste de tous les clients.
 
+- `GET /clients/{id}`  
+  → Retourne les détails d’un client spécifique en fonction de son `id`.
 
-# 4
-- On aura également un endpoint qui retourne un PDF:
-  - GET /clients/pdf : génère un PDF contenant la liste de tous les clients et le retourne en réponse. Le PDF doit être formaté de manière lisible, avec une table contenant les informations des clients (id, nom, prenom, email, date_inscription).
-  - Utiliser la librairie PDFBox pour générer le PDF
+- `POST /clients`  
+  → Permet d’ajouter un nouveau client à la liste.  
+  Les données du client seront envoyées dans le corps de la requête au format JSON.
 
+- Générer l’ensemble des tests d’intégration pour ces endpoints en utilisant **JUnit** et **MockMvc** (avec Spring).
 
-# 5
-- Ajouter une fonctionnalité de recherche de clients par nom ou prénom :
-  - GET /clients/search?query={query} : retourne une liste de clients dont le nom ou le prénom correspond à la query de recherche (la recherche doit être insensible à la casse). On doit pouvr rechercher par nom ou par prénom, ou les deux en même temps. Par exemple, une recherche pour "Jean" doit retourner tous les clients dont le nom ou le prénom contient "Jean" (ex: Jean Dupont, Marie Jeanne, etc.)
+---
 
+## 4. Génération d’un PDF
 
-  # 6
-- Générer le schema d'architectural de l'application en utilisant un outil de modélisation UML (comme PlantUML ou Mermaid). Le schéma doit inclure les différentes classes, leurs relations, ainsi que les endpoints exposés par l'application. Le schéma doit être clair et facile à comprendre pour un développeur qui n'est pas familier avec le projet.
-- Générer la documentation fonctionnelle de l'application au format Markdown, en expliquant les différentes fonctionnalités de l'application, les endpoints disponibles, ainsi que les étapes pour démarrer et utiliser l'application. La documentation doit être claire et concise, et doit inclure des exemples d'utilisation pour chaque endpoint.
+Ajouter un endpoint :
+
+- `GET /clients/pdf`  
+  → Génère un PDF contenant la liste de tous les clients et le retourne en réponse.
+
+Contraintes :
+
+- Le PDF doit être formaté de manière lisible.
+- Il doit contenir une table avec les colonnes :
+  - `id`
+  - `nom`
+  - `prenom`
+  - `email`
+  - `date_inscription`
+- Utiliser la librairie **PDFBox** pour générer le PDF.
+
+---
+
+## 5. Recherche de clients
+
+Ajouter une fonctionnalité de recherche :
+
+- `GET /clients/search?query={query}`  
+
+Ce endpoint :
+
+- Retourne une liste de clients dont le nom ou le prénom correspond à la requête.
+- La recherche doit être **insensible à la casse**.
+- Il doit être possible de rechercher par :
+  - nom
+  - prénom
+  - ou les deux en même temps
+
+Exemple :
+
+Une recherche pour `"Jean"` doit retourner :
+- Jean Dupont
+- Marie Jeanne
+- etc.
+
+---
+
+## 6. Architecture et documentation
+
+### Schéma UML
+
+- Générer le schéma architectural de l’application en utilisant un outil de modélisation UML  
+  (comme **PlantUML** ou **Mermaid**).
+- Le schéma doit inclure :
+  - Les différentes classes
+  - Leurs relations
+  - Les endpoints exposés
+- Le schéma doit être clair et compréhensible pour un développeur non familier avec le projet.
+
+### Documentation fonctionnelle
+
+- Générer la documentation fonctionnelle au format **Markdown**.
+- Expliquer :
+  - Les fonctionnalités de l’application
+  - Les endpoints disponibles
+  - Les étapes pour démarrer et utiliser l’application
+- Inclure des exemples d’utilisation pour chaque endpoint.
